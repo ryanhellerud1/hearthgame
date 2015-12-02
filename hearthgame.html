@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Demo with jQuery</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	    <meta name="description" content="Demo project with jQuery">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">	
+		<style type="text/css">
+		.bold{
+			font-weight: bold; 
+		}
+		#board1{
+			height: 50%;
+			width:75%;
+			display:inline-block;
+			float:left;
+			
+		}
+		.buttons{
+			display: block;
+		}
+		#player1{
+			height: 50%;
+			width:50%;
+			display:inline-block;
+			float:left;
+			background-color: red;
+		}
+		#board2{
+			height: 50%;
+			width:75%;
+			display:inline-block;
+			float:left;
+			
+		}
+		#player2{
+			height: 50%;
+			width:50%;
+			display:inline-block;
+			float:left;
+			background-color: pink;
+		}
+		</style>
+	</head>
+	<body>
+	<!-- 	<button id='juggler'> Juggler</button>
+		<button id='add'> Add Card</button>
+ -->
+<div id="player1">
+	<div class="buttons" >
+		<button id='juggle1'> Juggler</button>
+		<button id='addCard1'> Add Card</button>
+	</div>
+
+	<div id='board1'>
+
+	</div>
+</div>
+
+		
+<div id="player2">
+	<div class="buttons" >
+		<button id='juggle2'> Juggler</button>
+		<button id='addCard2'> Add Card</button>
+	</div>
+
+	<div id='board2'>
+
+	</div>
+</div>
+
+	</body>
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript">
+		jQuery(function(){
+			function Creature(name, atk, hp, prop){
+				this.name = name;
+				this.atk = atk;
+				this.hp = hp;
+				this.prop = prop;
+			}
+
+			var kj = new Creature('knife Juggler',  2, 2, 'juggle knife');
+			var s = new Creature('Sludger', 2, 5, 'taunt');
+			var w = new Creature('Wes', 2, 3);
+			var g = new Creature('Goop', 2, 5);
+			var r =  new Creature('Rocky', 2, 3);
+
+			var hand1 = [kj,s,w,g,r];
+			var hand2 = [kj,s,w,g,r];
+
+			var board1 = [];
+			var board2 = [];
+			var player1 = $('#board1');
+			var player2 = $('#board2');
+
+			$('#juggle1').click(function(){
+			   	var hitNumber = Math.floor(Math.random() * (board2.length - 0));
+			  	juggle(board2[hitNumber], board2, player2);
+			})
+
+			$('#addCard1').click(function(){
+				index =Math.floor(Math.random() * (hand1.length - 0)) + 0;
+				card = hand1[index];
+				hand1.splice(index,1);
+			   	board1.push(card);
+			   	update(board1, player1);
+			   	
+			})
+
+			$('#juggle2').click(function(board2){
+			   	var hitNumber = Math.floor(Math.random() * (board1.length - 0));
+			  	juggle(board1[hitNumber]);
+			})
+
+			$('#addCard2').click(function(){
+				index = Math.floor(Math.random() * (hand2.length - 0)) + 0;
+				card = hand2[index];
+			   	hand2.splice(index,1);
+			   	board2.push(card);
+			   	update(board2, player2);
+			})
+
+				function hpCheck(board){
+				  for(var i = 0; i <board.length; i++){
+				    if(board[i].hp < 1){
+				      board.splice(i,1);
+				    }
+				  }
+				}
+
+				function update(board, player){
+				  player.html('');
+				  for(var i = 0; i<board.length;i++){
+				     player.append(' ');
+				      for(var k in board[i]){
+				        var temp = k;
+				        if(temp === 'name'){
+				          temp = '';
+				          player.append("<span class='bold'>"+ temp+" " + board[i][k]+" " + "</span>");
+				        }else{
+				         player.append(k+": " + board[i][k]+" ");
+				        }
+				      }
+				  }
+				}
+
+				function juggle(creature, board, player){
+					creature.hp = creature.hp-1;
+				  	hpCheck(board);
+				  	update(board,  player);
+				  	
+				}
+			
+
+					});
+	</script>
+</html>
