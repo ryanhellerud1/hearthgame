@@ -82,17 +82,31 @@
 				this.prop = prop;
 			}
 
-			var kj = new Creature('knife Juggler',  2, 2, 'juggle knife');
-			var s = new Creature('Sludger', 2, 5, 'taunt');
-			var w = new Creature('Wes', 2, 3);
-			var g = new Creature('Goop', 2, 5);
-			var r =  new Creature('Rocky', 2, 3);
+			var kj1 = new Creature('knife Juggler',  2, 2, 'juggle knife');
+			var s1 = new Creature('Sludger', 2, 5, 'taunt');
+			var w1 = new Creature('Wes', 2, 3);
+			var g1 = new Creature('Goop', 2, 5);
+			var r1 =  new Creature('Rocky', 2, 3);
+			var kj2 = new Creature('knife Juggler',  2, 2, 'juggle knife');
+			var s2 = new Creature('Sludger', 2, 5, 'taunt');
+			var w2 = new Creature('Wes', 2, 3);
+			var g2 = new Creature('Goop', 2, 5);
+			var r2 =  new Creature('Rocky', 2, 3);
 
-			var hand1 = [kj,s,w,g,r];
-			var hand2 = [kj,s,w,g,r];
 
-			var board1 = [];
-			var board2 = [];
+
+			var player1= {
+				hand: [kj1,s1,w1,g1,r1],
+				board:[]
+
+
+			};
+			var player2 = {
+				hand:  [kj2,s2,w2,g2,r2],
+				board: []
+
+			};
+
 			var player1 = $('#board1');
 			var player2 = $('#board2');
 
