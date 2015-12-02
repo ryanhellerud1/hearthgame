@@ -51,7 +51,7 @@
 <div id="player1">
 	<div class="buttons" >
 		<button id='juggle1'> Juggler</button>
-		<button id='addCard1'> Add Card</button>
+		<button id='castCard1'> Add Card</button>
 	</div>
 
 	<div id='board1'>
@@ -63,7 +63,7 @@
 <div id="player2">
 	<div class="buttons" >
 		<button id='juggle2'> Juggler</button>
-		<button id='addCard2'> Add Card</button>
+		<button id='castCard2'> Add Card</button>
 	</div>
 
 	<div id='board2'>
@@ -74,7 +74,7 @@
 	</body>
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript">
-		jQuery(function(){
+
 			function Creature(name, atk, hp, prop){
 				this.name = name;
 				this.atk = atk;
@@ -87,6 +87,13 @@
 			var w = new Creature('Wes', 2, 3);
 			var g = new Creature('Goop', 2, 5);
 			var r =  new Creature('Rocky', 2, 3);
+
+			var deck = [];
+			deck[0] = new Creature('Knife Juggler',  2, 2, 'juggle knife');
+			deck[1]  = new Creature('Tirion', 6, 6, 'taunt');
+			deck[2]  = new Creature('Eadric the Pure', 3, 7);
+			deck[3] = new Creature('Aviana', 5, 5);
+			deck[4]  = new Creature('Tristana', 6, 2);
 
 			var hand1 = [kj,s,w,g,r];
 			var hand2 = [kj,s,w,g,r];
@@ -101,7 +108,7 @@
 			  	juggle(board2[hitNumber], board2, player2);
 			})
 
-			$('#addCard1').click(function(){
+			$('#castCard1').click(function(){
 				if(hand1.length === 0){
 					console.log('hand empty')
 				}else{
@@ -119,7 +126,7 @@
 			  	juggle(board1[hitNumber], board1, player1);
 			})
 
-			$('#addCard2').click(function(){
+			$('#castCard2').click(function(){
 				if(hand2.length === 0){
 					console.log('hand 2 empty')
 				}else{
@@ -162,7 +169,13 @@
 				  	
 				}
 			
+				function draw(){
+					var index = Math.floor(Math.random() * (deck.length));
+					hand1.push(deck[index]);
+					deck.splice(index,1);
+				}
 
-					});
+
+
 	</script>
 </html>
