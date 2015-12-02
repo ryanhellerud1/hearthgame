@@ -2,7 +2,6 @@
 <html>
 <title>Hearth Test</title>
 	<head>
-		<title>Demo with jQuery</title>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	    <meta name="description" content="Demo project with jQuery">
@@ -103,25 +102,33 @@
 			})
 
 			$('#addCard1').click(function(){
+				if(hand1.length === 0){
+					console.log('hand empty')
+				}else{
 				index =Math.floor(Math.random() * (hand1.length - 0)) + 0;
 				card = hand1[index];
 				hand1.splice(index,1);
 			   	board1.push(card);
 			   	update(board1, player1);
+			   		}
 			   	
 			})
 
 			$('#juggle2').click(function(board2){
 			   	var hitNumber = Math.floor(Math.random() * (board1.length - 0));
-			  	juggle(board1[hitNumber]);
+			  	juggle(board1[hitNumber], board1, player1);
 			})
 
 			$('#addCard2').click(function(){
+				if(hand2.length === 0){
+					console.log('hand 2 empty')
+				}else{
 				index = Math.floor(Math.random() * (hand2.length - 0)) + 0;
 				card = hand2[index];
 			   	hand2.splice(index,1);
 			   	board2.push(card);
 			   	update(board2, player2);
+			   		}
 			})
 
 				function hpCheck(board){
