@@ -51,7 +51,8 @@
 <div id="player1">
 	<div class="buttons" >
 		<button id='juggle1'> Juggler</button>
-		<button id='addCard1'> Add Card</button>
+		<button id='castCard1'> Add Card</button>
+		<button id='drawCard1'> Draw Card</button>
 	</div>
 
 	<div id='board1'>
@@ -63,7 +64,8 @@
 <div id="player2">
 	<div class="buttons" >
 		<button id='juggle2'> Juggler</button>
-		<button id='addCard2'> Add Card</button>
+		<button id='castCard2'> Add Card</button>
+		<button id='drawCard2'> Draw Card</button>
 	</div>
 
 	<div id='board2'>
@@ -74,7 +76,7 @@
 	</body>
 	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript">
-		jQuery(function(){
+
 			function Creature(name, atk, hp, prop){
 				this.name = name;
 				this.atk = atk;
@@ -82,66 +84,84 @@
 				this.prop = prop;
 			}
 
-			var kj1 = new Creature('knife Juggler',  2, 2, 'juggle knife');
-			var s1 = new Creature('Sludger', 2, 5, 'taunt');
-			var w1 = new Creature('Wes', 2, 3);
-			var g1 = new Creature('Goop', 2, 5);
-			var r1 =  new Creature('Rocky', 2, 3);
-			var kj2 = new Creature('knife Juggler',  2, 2, 'juggle knife');
-			var s2 = new Creature('Sludger', 2, 5, 'taunt');
-			var w2 = new Creature('Wes', 2, 3);
-			var g2 = new Creature('Goop', 2, 5);
-			var r2 =  new Creature('Rocky', 2, 3);
+
+
+
+	
 
 
 
 			var player1= {
-				hand: [kj1,s1,w1,g1,r1],
-				board:[]
+				deck:[],
+				hand: [],
+				board:[],
+				el: $('#board1')
 
 
 			};
 			var player2 = {
-				hand:  [kj2,s2,w2,g2,r2],
-				board: []
+				deck: [],
+				hand:  [],
+				board: [],
+				el: $('#board2')
 
 			};
 
-			var player1 = $('#board1');
-			var player2 = $('#board2');
+			player1.deck[0] = new Creature('Knife Juggler',  2, 2, 'juggle knife');
+			player1.deck[1]  = new Creature('Tirion', 6, 6, 'taunt');
+			player1.deck[2]  = new Creature('Eadric the Pure', 3, 7);
+			player1.deck[3] = new Creature('Aviana', 5, 5);
+			player1.deck[4]  = new Creature('Tristana', 6, 2);
+
+			player2.deck[0] = new Creature('Knife Juggler',  2, 2, 'juggle knife');
+			player2.deck[1]  = new Creature('Tirion', 6, 6, 'taunt');
+			player2.deck[2]  = new Creature('Eadric the Pure', 3, 7);
+			player2.deck[3] = new Creature('Aviana', 5, 5);
+			player2.deck[4]  = new Creature('Tristana', 6, 2);
+
 
 			$('#juggle1').click(function(){
-			   	var hitNumber = Math.floor(Math.random() * (board2.length - 0));
-			  	juggle(board2[hitNumber], board2, player2);
+			   	var hitNumber = Math.floor(Math.random() * (player2.hand.length - 0));
+			  	juggle(player2.hand[hitNumber], player2.hand, player2.el);
 			})
 
-			$('#addCard1').click(function(){
-				if(hand1.length === 0){
+			$('#castCard1').click(function(){
+				if(player1.hand.length === 0){
 					console.log('hand empty')
 				}else{
-				index =Math.floor(Math.random() * (hand1.length - 0)) + 0;
-				card = hand1[index];
-				hand1.splice(index,1);
-			   	board1.push(card);
-			   	update(board1, player1);
+				index =Math.floor(Math.random() * (player1.hand.length - 0)) + 0;
+				card = player1.hand[index];
+				player1.hand.splice(index,1);
+			   	player1.board.push(card);
+			   	update(player1.board, player1.el);
 			   		}
 			   	
 			})
 
-			$('#juggle2').click(function(board2){
-			   	var hitNumber = Math.floor(Math.random() * (board1.length - 0));
-			  	juggle(board1[hitNumber], board1, player1);
+			$('#drawCard1').click(function(){
+				if(player1.deck.length === 0){
+					console.log('deck empty')
+				}else{
+					draw(player1.hand, player1.deck)
+				
+			   		}
+			   	
 			})
 
-			$('#addCard2').click(function(){
-				if(hand2.length === 0){
+			$('#juggle2').click(function(){
+			   	var hitNumber = Math.floor(Math.random() * (player1.board.length - 0));
+			  	juggle(player1.board[hitNumber], player1.hand, player1.el);
+			})
+
+			$('#castCard2').click(function(){
+				if(player2.hand.length === 0){
 					console.log('hand 2 empty')
 				}else{
-				index = Math.floor(Math.random() * (hand2.length - 0)) + 0;
-				card = hand2[index];
-			   	hand2.splice(index,1);
-			   	board2.push(card);
-			   	update(board2, player2);
+				index = Math.floor(Math.random() * (player2.hand.length - 0)) + 0;
+				card = player2.hand[index];
+			   	player2.hand.splice(index,1);
+			   	player2.board.push(card);
+			   	update(player2.board, player2.el);
 			   		}
 			})
 
@@ -172,11 +192,18 @@
 				function juggle(creature, board, player){
 					creature.hp = creature.hp-1;
 				  	hpCheck(board);
-				  	update(board,  player);
+				  	update(board, player);
 				  	
 				}
 			
+				function draw(playerHand, playerDeck){
+					var index = Math.floor(Math.random() * (playerDeck.length));
+					playerHand.push(playerDeck[index]);
+					console.log('drew: '+ playerDeck[index])
+					playerDeck.splice(index,1);
+				}
 
-					});
+
+
 	</script>
 </html>
