@@ -71,6 +71,8 @@
 	<div class="buttons">
 		<button id='juggle1'> Juggler</button>
 		<button id='drawCard1'> Draw Card</button>
+		<button class='endTurn'> End Turn</button>
+
 	</div>
 
 	<div class="manaarea">
@@ -90,7 +92,7 @@
 	<div class="buttons">
 		<button id='juggle2'> Juggler</button>
 		<button id='castCard2'> Cast Card</button>
-		<button id='drawCard2'> Draw Card</button>
+		<button class='endTurn'> End Turn</button>
 	</div>
 
 	<div class="manaarea">
@@ -122,18 +124,22 @@
 				deck:[],
 				hand: [],
 				board:[],
-				mana: 1,
+				currentMana: 1,
+				totalMana: 1,
 				elBoard: $('#board1'),
-				elHand: $('#hand1')
+				elHand: $('#hand1'),
+				turn: 1
 			};
 			var player2 = {
 				name: 'opponent',
 				deck: [],
 				hand:  [],
 				board: [],
-				mana: 1,
+				currentMana: 0,
+				totalMana: 0,
 				elBoard: $('#board2'),
-				elHand: $('#hand2')
+				elHand: $('#hand2'),
+				turn: 2
 			};
 
 			player1.deck[0] = new Creature('Knife Juggler',2,  2, 2, 'juggle knife');
@@ -148,9 +154,39 @@
 			player2.deck[3] = new Creature('Aviana',9, 5, 5);
 			player2.deck[4]  = new Creature('Tristana',1, 6, 2);
 
-			player1.mana = 10;
-			player2.mana = 10;
+			
 
+
+
+// if(player1.turn % 2 === 0){
+// 						$('.endTurn')[0].hide()
+// 						}
+
+
+	
+/////////////////////// Turn
+$('.endTurn').on('click', function(){
+	if($(this).index('.endTurn') === 0){
+		$(this).hide();
+		$('.endTurn').eq(1).show()
+		player2.totalMana++
+		player2.currentMana = player2.totalMana
+		updatePlayer(player2);
+		 $('#hand1 .playcard').hide();
+		draw(player2.hand, player2.deck, player2.elHand);
+	} 
+	if($(this).index('.endTurn') === 1){
+		$(this).hide();
+		$('.endTurn').eq(0).show()
+		player1.totalMana++
+		player1.currentMana = player1.totalMana
+		updatePlayer(player1);
+		$('#hand2 .playcard').hide();
+		draw(player1.hand, player1.deck, player1.elHand);
+	} 
+	
+
+})
 
 
 /////////////////////// DRAW CARD
@@ -180,8 +216,8 @@
 					card = player1.hand[index];
 
 					//Check mana
-					if(player1.mana >= card.mana){
-						player1.mana -= card.mana;
+					if(player1.currentMana >= card.mana){
+						player1.currentMana -= card.mana;
 						player1.hand.splice(index,1);
 					   	player1.board.push(card);
 					   	updateBoard(player1.board, player1.elBoard);
@@ -207,8 +243,8 @@
 			   		}
 			})
 
+/////////////////////////FUNCTIONS
 
-//functions
 				function hpCheck(board){
 				  for(var i = 0; i <board.length; i++){
 				    if(board[i].hp < 1){
@@ -252,12 +288,17 @@
 
 				function updatePlayer(player){
 					if(player.name == 'you'){
-						$('.mana1').text(player.mana);
+						$('.mana1').text(player.currentMana);
 					}
 					if(player.name == 'opponent'){
-						$('.mana2').text(player.mana);
+						$('.mana2').text(player.currentMana);
 					}
+
+					
+
 				}
+
+				
 
 ///////////////JUGGLE
 			$('#juggle1').click(function(){
@@ -278,8 +319,6 @@
 			  	}
 			})
 
-
-
 				function juggle(creature, board, player){
 					creature.hp--;
 				  	hpCheck(board);
@@ -296,15 +335,13 @@
 				}
 
 ////////////// INIT
-	for(var i=0; i<4; i++){
+	for(var i=0; i<3; i++){
 		draw(player1.hand, player1.deck, player1.elHand);
 		draw(player2.hand, player2.deck, player2.elHand);		
 	}
-
+	//draw(player1.hand, player1.deck, player1.elHand);
 	updatePlayer(player1);
 	updatePlayer(player2);
-
-
 
 	</script>
 </html>
