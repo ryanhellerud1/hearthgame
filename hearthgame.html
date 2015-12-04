@@ -6,30 +6,42 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	    <meta name="description" content="Demo project with jQuery">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="http://d2v52k3cl9vedd.cloudfront.net/basscss/7.0.4/basscss.min.css" rel="stylesheet">
 		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">	
 		<style type="text/css">
+		header{
+
+		}
 		.bold{
 			font-weight: bold; 
 		}
+		.left{
+			float:left;
+		}
+		.right{
+			float:right;
+		}
+		.card{
+
+		}
+
 		.board{
 			height: 50%;
-			width:75%;
+			width:35%;
 			display:inline-block;
-			float:left;
 			background-color: red;
-			
 		}
 
 		.hand{
 			height: 50%;
-			width:75%;
+			width:35%;
 			display:inline-block;
-			float:left;
 			background-color: pink;
-			
 		}
 
 		.buttons{
@@ -40,7 +52,7 @@
 			height: 50%;
 			width:50%;
 			display:inline-block;
-			float:left;
+		
 		}
 		
 		.test{
@@ -49,46 +61,53 @@
 			overflow:hidden;
 			border:1px solid black;
 		}
+
+	
 		</style>
 
 	</head>
+
 	<body>
-	<!-- 	<button id='juggler'> Juggler</button>
-		<button id='add'> Add Card</button>
- -->
-<div class="player">
-
-	<button class='endTurn'> End Turn</button>
-
-	<div class="manaarea">
-		Mana crystals: <span class="mana mana1">1</span>
-	</div>
-
-	<div class='board'>
-	</div>
-
-	<div class='hand'>
-	</div>
-
-</div>
+<div class="container">
+	<header class="block bg-silver py4">
+	<div class="manaarea left clearfix">
+			Mana crystals: <span class="mana mana1">1</span>
+		</div>
+		<div class="manaarea right">
+			Mana crystals: <span class="mana mana2">1</span>
+		</div>
+			<button class='endTurn left clearfix'> End Turn</button>
+			<button class='endTurn right'> End Turn</button>
+	</header>
+	<div class="player  left">
 
 		
-<div class="player">
 
-	<button class='endTurn'> End Turn</button>
+		
 
-	<div class="manaarea">
-		Mana crystals: <span class="mana mana2">1</span>
+		<div class='board right'>
+		</div>
+
+		<div class='hand left'>
+		</div>
+
 	</div>
 
-	<div class='board'>
-	</div>
+			
+	<div class="player  right">
 
-	<div class='hand'>
-	</div>
+		
 
+		
+
+		<div class='board left'>
+		</div>
+
+		<div class='hand right'>
+		</div>
+
+	</div>
 </div>
-
 
 <div class="test">
   <p>Drag me to my target</p>
@@ -101,7 +120,15 @@
 
 	</body>
 
-	<script type="text/javascript">
+		
+	 
+
+	 <script type="text/javascript">
+
+
+
+			// var cardTemplate = _.template($("#card-template").html);
+			// var cardHtml = cardTemplate({cards})
 
 			function Creature(name, mana, atk, hp, prop){
 				this.name = name;
@@ -110,31 +137,6 @@
 				this.hp = hp;
 				this.prop = prop;
 			}
-
-
-
-			player1 = {
-				name: 'you',
-				deck:[],
-				hand: [],
-				board:[],
-				currentMana: 1,
-				totalMana: 1,
-				elBoard: $('.board').eq(0),
-				elHand: $('.hand').eq(0)
-			};
-
-			player2 = {
-				name: 'opponent',
-				deck: [],
-				hand:  [],
-				board: [],
-				currentMana: 0,
-				totalMana: 0,
-				elBoard: $('.board').eq(1),
-				elHand: $('.hand').eq(1)
-			};
-
 
 			var players = [];
 
@@ -183,7 +185,7 @@
 			players[1].deck[9]  = new Creature('Afrojack',6, 1, 8);
 
 	
-/////////////////////// Turn
+/////////////////////// End Turn
 			$('.endTurn').on('click', function(){
 
 					var index = $(this).index('.endTurn');
@@ -194,7 +196,7 @@
 					players[1-index].totalMana++;
 					players[1-index].currentMana = players[1-index].totalMana;
 					//$('.hand .playcard').eq(0).hide();
-					$(this).siblings('.hand').children('.playcard').hide();
+					$(this).parent().siblings().find('.hand').children('.playcard').hide();
 					updatePlayer(players[1-index]);	
 					draw(players[1-index].hand, players[1-index].deck, players[1-index].elHand);
 			})
@@ -238,16 +240,21 @@
 					//update board
 				  player.html('');
 				  for(var i = 0; i<board.length;i++){
-				     player.append(' ');
+
+				     player.append( "<div class='card card" +i+"'></div>" );
+
+
 				      for(var k in board[i]){
 				        var temp = k;
 				        if(temp === 'name'){
 				          temp = '';
-				          player.append("<span class='bold'>"+ temp+" " + board[i][k] + "</span><br>");
+				          player.find(".card"+i).append("<span class='bold'>"+ temp+ " " + board[i][k] + "</span><br>");
 				        }else{
-				         player.append(k+": " + board[i][k]+"<br>");
+				         player.find(".card"+i).append(k+": " + board[i][k]+"<br>");
 				        }
 				      }
+				    // player.append( "");
+				      
 				  }
 				}
 
@@ -320,7 +327,7 @@
 	//draw(player1.hand, player1.deck, player1.elHand);
 	updatePlayer(players[0]);
 	updatePlayer(players[1]);
-	$('.endTurn').eq(0).hide()
+	$('.endTurn').eq(1).hide()
 
 
 //////// jquery ui
