@@ -11,7 +11,7 @@
 		.bold{
 			font-weight: bold; 
 		}
-		#board1{
+		.board{
 			height: 50%;
 			width:75%;
 			display:inline-block;
@@ -19,14 +19,8 @@
 			background-color: red;
 			
 		}
-		#board2{
-			height: 50%;
-			width:75%;
-			display:inline-block;
-			float:left;
-			background-color: red;
-		}
-		#hand1{
+
+		.hand{
 			height: 50%;
 			width:75%;
 			display:inline-block;
@@ -34,18 +28,12 @@
 			background-color: pink;
 			
 		}
-		#hand2{
-			height: 50%;
-			width:75%;
-			display:inline-block;
-			float:left;
-			background-color: pink;
-			
-		}
+
 		.buttons{
 			display: block;
 		}
-		#player1{
+
+		.player{
 			height: 50%;
 			width:50%;
 			display:inline-block;
@@ -54,55 +42,42 @@
 		}
 		
 		
-		#player2{
-			height: 50%;
-			width:50%;
-			display:inline-block;
-			float:left;
-			
-		}
 		</style>
 	</head>
 	<body>
 	<!-- 	<button id='juggler'> Juggler</button>
 		<button id='add'> Add Card</button>
  -->
-<div id="player1">
-	<div class="buttons">
-		<button id='juggle1'> Juggler</button>
-		<button id='drawCard1'> Draw Card</button>
-		<button class='endTurn'> End Turn</button>
+<div class="player">
+	<button class='endTurn'> End Turn</button>
 
-	</div>
+
 
 	<div class="manaarea">
 		Mana crystals: <span class="mana mana1">1</span>
 	</div>
 
-	<div id='board1'>
+	<div class='board'>
 
 	</div>
-	<div id='hand1'>
-
+	<div class='hand'>
 	</div>
 </div>
 
 		
-<div id="player2">
-	<div class="buttons">
-		<button id='juggle2'> Juggler</button>
-		<button id='castCard2'> Cast Card</button>
-		<button class='endTurn'> End Turn</button>
-	</div>
+<div class="player">
+
+	<button class='endTurn'> End Turn</button>
+
 
 	<div class="manaarea">
 		Mana crystals: <span class="mana mana2">1</span>
 	</div>
 
-	<div id='board2'>
+	<div class='board'>
 
 	</div>
-	<div id='hand2'>
+	<div class='hand'>
 
 	</div>
 </div>
@@ -119,28 +94,55 @@
 				this.prop = prop;
 			}
 
-			var player1= {
+
+
+			player1 = {
 				name: 'you',
 				deck:[],
 				hand: [],
 				board:[],
 				currentMana: 1,
 				totalMana: 1,
-				elBoard: $('#board1'),
-				elHand: $('#hand1'),
-				turn: 1
+				elBoard: $('.board').eq(0),
+				elHand: $('.hand').eq(0)
 			};
-			var player2 = {
+
+			player2 = {
 				name: 'opponent',
 				deck: [],
 				hand:  [],
 				board: [],
 				currentMana: 0,
 				totalMana: 0,
-				elBoard: $('#board2'),
-				elHand: $('#hand2'),
-				turn: 2
+				elBoard: $('.board').eq(1),
+				elHand: $('.hand').eq(1)
 			};
+
+
+			var players = [];
+
+			players[0] = {
+				name: 'you',
+				deck:[],
+				hand: [],
+				board:[],
+				currentMana: 1,
+				totalMana: 1,
+				elBoard: $('.board').eq(0),
+				elHand: $('.hand').eq(0)
+			};
+
+			players[1] = {
+				name: 'opponent',
+				deck: [],
+				hand:  [],
+				board: [],
+				currentMana: 0,
+				totalMana: 0,
+				elBoard: $('.board').eq(1),
+				elHand: $('.hand').eq(1)
+			};
+
 
 			player1.deck[0] = new Creature('Knife Juggler',2,  2, 2, 'juggle knife');
 			player1.deck[1]  = new Creature('Tirion',8, 6, 6, 'taunt');
@@ -154,94 +156,82 @@
 			player2.deck[3] = new Creature('Aviana',9, 5, 5);
 			player2.deck[4]  = new Creature('Tristana',1, 6, 2);
 
-			
+			players[0].deck[0] = new Creature('Knife Juggler',2,  2, 2, 'juggle knife');
+			players[0].deck[1]  = new Creature('Tirion',8, 6, 6, 'taunt');
+			players[0].deck[2]  = new Creature('Eadric the Pure',7, 3, 7);
+			players[0].deck[3] = new Creature('Aviana',9, 5, 5);
+			players[0].deck[4]  = new Creature('Tristana',1, 6, 2);
 
-
-
-// if(player1.turn % 2 === 0){
-// 						$('.endTurn')[0].hide()
-// 						}
-
+			players[1].deck[0] = new Creature('Kelthusad',8,  6, 8, 'respawn');
+			players[1].deck[1]  = new Creature('Malzahar',2, 3, 9, 'taunt');
+			players[1].deck[2]  = new Creature('Farseer',3, 3, 3);
+			players[1].deck[3] = new Creature('Aviana',9, 5, 5);
+			players[1].deck[4]  = new Creature('Tristana',1, 6, 2);
 
 	
 /////////////////////// Turn
-$('.endTurn').on('click', function(){
-	if($(this).index('.endTurn') === 0){
-		$(this).hide();
-		$('.endTurn').eq(1).show()
-		player2.totalMana++
-		player2.currentMana = player2.totalMana
-		updatePlayer(player2);
-		 $('#hand1 .playcard').hide();
-		draw(player2.hand, player2.deck, player2.elHand);
-	} 
-	if($(this).index('.endTurn') === 1){
-		$(this).hide();
-		$('.endTurn').eq(0).show()
-		player1.totalMana++
-		player1.currentMana = player1.totalMana
-		updatePlayer(player1);
-		$('#hand2 .playcard').hide();
-		draw(player1.hand, player1.deck, player1.elHand);
-	} 
-	
+			$('.endTurn').on('click', function(){
 
-})
+					var index = $(this).index('.endTurn');
+					$(this).hide();
 
+					$('.endTurn').eq(1-index).show()
+
+					players[1-index].totalMana++;
+					players[1-index].currentMana = players[1-index].totalMana;
+					//$('.hand .playcard').eq(0).hide();
+					$(this).siblings('.hand').children('.playcard').hide();
+					updatePlayer(players[1-index]);	
+					draw(players[1-index].hand, players[1-index].deck, players[1-index].elHand);
+			})
 
 /////////////////////// DRAW CARD
 
-			$('#drawCard1').click(function(){
-				if(player1.deck.length === 0){
-					console.log('deck empty')
-				}else{
-					draw(player1.hand, player1.deck, player1.elHand);
-			   	}
-			})
+			// $('.drawCard').click(function(){
+			// 	var index = $(this).index('drawCard');
+			// 	if(players[1-index].deck.length === 0){
+			// 		console.log('deck empty');
+			// 	}else{
+			// 		draw(players[1-index].hand, players[1-index].deck, players[1-index].elHand);
+			//    	}
+			// })
 
-			$('#drawCard2').click(function(){
-				if(player2.deck.length === 0){
-					console.log('deck empty')
-				}else{
-					draw(player2.hand, player2.deck,player2.elHand)
-			   		}
-			})
-
-////////////////////////CAST/PLAY CARD
+//////////////////////// CAST/PLAY CARD
 			$(document).on( 'click', '.playcard', function(){
-				if(player1.hand.length === 0){
-					console.log('hand empty');
+				var playerIndex = $(this).parent().parent().index('.player')
+				var index = $(this).index('.playcard');
+				if(players[playerIndex].hand.length === 0){
+				console.log('hand empty');
+
 				}else{
-					index = $(this).index('.playcard');
-					card = player1.hand[index];
+					card = players[playerIndex].hand[index];
 
 					//Check mana
-					if(player1.currentMana >= card.mana){
-						player1.currentMana -= card.mana;
-						player1.hand.splice(index,1);
-					   	player1.board.push(card);
-					   	updateBoard(player1.board, player1.elBoard);
-					   	updateHand(player1.hand, player1.elHand);
-					   	updatePlayer(player1);					
+					if(players[playerIndex].currentMana >= card.mana){
+						players[playerIndex].currentMana -= card.mana;
+						players[playerIndex].hand.splice(index,1);
+					   	players[playerIndex].board.push(card);
+					   	updateBoard(players[playerIndex].board, players[playerIndex].elBoard);
+					   	updateHand(players[playerIndex].hand, players[playerIndex].elHand);
+					   	updatePlayer(players[playerIndex]);					
 					   } else {
 					   		alert("Not enough mana");
 					   }
 			   	}
 			})
 
-
-			$('#castCard2').click(function(){
-				if(player2.hand.length === 0){
-				console.log('hand 2 empty')
-				}else{
-				index = Math.floor(Math.random() * (player2.hand.length - 0)) + 0;
-				card = player2.hand[index];
-			   	player2.hand.splice(index,1);
-			   	player2.board.push(card);
-			   	updateBoard(player2.board, player2.elBoard);
-			   	updateHand(player2.hand, player2.elHand);
-			   		}
-			})
+			// $('#castCard2').click(function(){
+			// 	if(player2.hand.length === 0){
+			// 		console.log('hand 2 empty');
+			// 	}else{
+			// 		index = Math.floor(Math.random() * (player2.hand.length - 0)) + 0;
+			// 		card = player2.hand[index];
+			// 	   	player2.hand.splice(index,1);
+			// 	   	player2.board.push(card);
+			// 	   	updateBoard(player2.board, player2.elBoard);
+			// 	   	updateHand(player2.hand, player2.elHand);
+			//    		}
+			// })
 
 /////////////////////////FUNCTIONS
 
@@ -293,31 +283,28 @@ $('.endTurn').on('click', function(){
 					if(player.name == 'opponent'){
 						$('.mana2').text(player.currentMana);
 					}
-
-					
-
 				}
 
 				
 
 ///////////////JUGGLE
-			$('#juggle1').click(function(){
-			   	var hitNumber = Math.floor(Math.random() * (player2.board.length - 0));
-			   	if(player1.board.length<1){
-			   		alert('nothing on the board to hit');
-			   	}else{
-			  	juggle(player2.board[hitNumber], player2.board, player2.elBoard);
-			  	}
-			})
+			// $('#juggle1').click(function(){
+			//    	var hitNumber = Math.floor(Math.random() * (player2.board.length - 0));
+			//    	if(player1.board.length<1){
+			//    		alert('nothing on the board to hit');
+			//    	}else{
+			//   	juggle(player2.board[hitNumber], player2.board, player2.elBoard);
+			//   	}
+			// })
 
-			$('#juggle2').click(function(){
-			   	var hitNumber = Math.floor(Math.random() * (player1.board.length - 0));
-			   	if(player1.board.length < 1){
-			   		alert('nothing on the board to hit')
-			   	}else{
-			  	juggle(player1.board[hitNumber], player1.board, player1.elBoard);
-			  	}
-			})
+			// $('#juggle2').click(function(){
+			//    	var hitNumber = Math.floor(Math.random() * (player1.board.length - 0));
+			//    	if(player1.board.length < 1){
+			//    		alert('nothing on the board to hit')
+			//    	}else{
+			//   	juggle(player1.board[hitNumber], player1.board, player1.elBoard);
+			//   	}
+			// })
 
 				function juggle(creature, board, player){
 					creature.hp--;
@@ -336,12 +323,12 @@ $('.endTurn').on('click', function(){
 
 ////////////// INIT
 	for(var i=0; i<3; i++){
-		draw(player1.hand, player1.deck, player1.elHand);
-		draw(player2.hand, player2.deck, player2.elHand);		
+		draw(players[0].hand, players[0].deck, players[0].elHand);
+		draw(players[1].hand, players[1].deck, players[1].elHand);		
 	}
 	//draw(player1.hand, player1.deck, player1.elHand);
-	updatePlayer(player1);
-	updatePlayer(player2);
+	updatePlayer(players[0]);
+	updatePlayer(players[1]);
 
 	</script>
 </html>
