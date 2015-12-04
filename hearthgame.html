@@ -190,8 +190,6 @@
 				var playerIndex = $(this).parent().parent().index('.player');
 				var index = $(this).parent().children('.playcard').index(this);
 				if(players[playerIndex].hand.length === 0){
-				alert('hand empty');
-
 				}else{
 					card = players[playerIndex].hand[index];
 
@@ -307,6 +305,6 @@
 	//draw(player1.hand, player1.deck, player1.elHand);
 	updatePlayer(players[0]);
 	updatePlayer(players[1]);
-
+	$('.endTurn').eq(0).hide()
 	</script>
 </html>
