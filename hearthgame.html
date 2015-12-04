@@ -49,19 +49,19 @@
 		<button id='add'> Add Card</button>
  -->
 <div class="player">
+
 	<button class='endTurn'> End Turn</button>
-
-
 
 	<div class="manaarea">
 		Mana crystals: <span class="mana mana1">1</span>
 	</div>
 
 	<div class='board'>
-
 	</div>
+
 	<div class='hand'>
 	</div>
+
 </div>
 
 		
@@ -69,17 +69,16 @@
 
 	<button class='endTurn'> End Turn</button>
 
-
 	<div class="manaarea">
 		Mana crystals: <span class="mana mana2">1</span>
 	</div>
 
 	<div class='board'>
-
 	</div>
+
 	<div class='hand'>
-
 	</div>
+
 </div>
 
 	</body>
@@ -185,23 +184,13 @@
 					draw(players[1-index].hand, players[1-index].deck, players[1-index].elHand);
 			})
 
-/////////////////////// DRAW CARD
-
-			// $('.drawCard').click(function(){
-			// 	var index = $(this).index('drawCard');
-			// 	if(players[1-index].deck.length === 0){
-			// 		console.log('deck empty');
-			// 	}else{
-			// 		draw(players[1-index].hand, players[1-index].deck, players[1-index].elHand);
-			//    	}
-			// })
 
 //////////////////////// CAST/PLAY CARD
 			$(document).on( 'click', '.playcard', function(){
-				var playerIndex = $(this).parent().parent().index('.player')
-				var index = $(this).index('.playcard');
+				var playerIndex = $(this).parent().parent().index('.player');
+				var index = $(this).parent().children('.playcard').index(this);
 				if(players[playerIndex].hand.length === 0){
-				console.log('hand empty');
+				alert('hand empty');
 
 				}else{
 					card = players[playerIndex].hand[index];
@@ -220,18 +209,7 @@
 			   	}
 			})
 
-			// $('#castCard2').click(function(){
-			// 	if(player2.hand.length === 0){
-			// 		console.log('hand 2 empty');
-			// 	}else{
-			// 		index = Math.floor(Math.random() * (player2.hand.length - 0)) + 0;
-			// 		card = player2.hand[index];
-			// 	   	player2.hand.splice(index,1);
-			// 	   	player2.board.push(card);
-			// 	   	updateBoard(player2.board, player2.elBoard);
-			// 	   	updateHand(player2.hand, player2.elHand);
-			//    		}
-			// })
+
 
 /////////////////////////FUNCTIONS
 
