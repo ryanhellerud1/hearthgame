@@ -6,6 +6,9 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	    <meta name="description" content="Demo project with jQuery">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">	
 		<style type="text/css">
 		.bold{
@@ -38,11 +41,16 @@
 			width:50%;
 			display:inline-block;
 			float:left;
-			
 		}
 		
-		
+		.test{
+			width:200px;
+			height:200px;
+			overflow:hidden;
+			border:1px solid black;
+		}
 		</style>
+
 	</head>
 	<body>
 	<!-- 	<button id='juggler'> Juggler</button>
@@ -81,8 +89,18 @@
 
 </div>
 
+
+<div class="test">
+  <p>Drag me to my target</p>
+</div>
+ 
+<div class="test">
+  <p>Drop here</p>
+</div>
+
+
 	</body>
-	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+
 	<script type="text/javascript">
 
 			function Creature(name, mana, atk, hp, prop){
@@ -142,30 +160,27 @@
 				elHand: $('.hand').eq(1)
 			};
 
-
-			player1.deck[0] = new Creature('Knife Juggler',2,  2, 2, 'juggle knife');
-			player1.deck[1]  = new Creature('Tirion',8, 6, 6, 'taunt');
-			player1.deck[2]  = new Creature('Eadric the Pure',7, 3, 7);
-			player1.deck[3] = new Creature('Aviana',9, 5, 5);
-			player1.deck[4]  = new Creature('Tristana',1, 6, 2);
-
-			player2.deck[0] = new Creature('Kelthusad',8,  6, 8, 'respawn');
-			player2.deck[1]  = new Creature('Malzahar',2, 3, 9, 'taunt');
-			player2.deck[2]  = new Creature('Farseer',3, 3, 3);
-			player2.deck[3] = new Creature('Aviana',9, 5, 5);
-			player2.deck[4]  = new Creature('Tristana',1, 6, 2);
-
 			players[0].deck[0] = new Creature('Knife Juggler',2,  2, 2, 'juggle knife');
 			players[0].deck[1]  = new Creature('Tirion',8, 6, 6, 'taunt');
 			players[0].deck[2]  = new Creature('Eadric the Pure',7, 3, 7);
 			players[0].deck[3] = new Creature('Aviana',9, 5, 5);
 			players[0].deck[4]  = new Creature('Tristana',1, 6, 2);
+			players[0].deck[5] = new Creature('Knife Juggler',2,  2, 2, 'juggle knife');
+			players[0].deck[6]  = new Creature('Anivia',1, 1, 2, 'taunt');
+			players[0].deck[7]  = new Creature('Wyrmrest Agent',2, 2, 4);
+			players[0].deck[8] = new Creature('Alextraza',9, 8, 8);
+			players[0].deck[9]  = new Creature('Leper Gnome',1, 2, 1);
 
-			players[1].deck[0] = new Creature('Kelthusad',8,  6, 8, 'respawn');
+			players[1].deck[0] = new Creature('Kelthuzad',8,  6, 8, 'respawn');
 			players[1].deck[1]  = new Creature('Malzahar',2, 3, 9, 'taunt');
 			players[1].deck[2]  = new Creature('Farseer',3, 3, 3);
 			players[1].deck[3] = new Creature('Aviana',9, 5, 5);
 			players[1].deck[4]  = new Creature('Tristana',1, 6, 2);
+			players[1].deck[5] = new Creature('Wisp',0,  1, 1, 'respawn');
+			players[1].deck[6]  = new Creature('Baby Murloc',0, 1, 1, 'taunt');
+			players[1].deck[7]  = new Creature('Spider Tank',3, 3, 4);
+			players[1].deck[8] = new Creature('Nearseer',2, 3, 1);
+			players[1].deck[9]  = new Creature('Afrojack',6, 1, 8);
 
 	
 /////////////////////// Turn
@@ -306,5 +321,20 @@
 	updatePlayer(players[0]);
 	updatePlayer(players[1]);
 	$('.endTurn').eq(0).hide()
+
+
+//////// jquery ui
+
+ $( ".test" ).draggable();
+    $( ".test" ).droppable({
+      drop: function( event, ui ) {
+        $( this )
+          .addClass( "ui-state-highlight" )
+          .find( "p" )
+            .html( "Dropped!" );
+      }
+    });
+
+
 	</script>
 </html>
