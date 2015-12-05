@@ -129,9 +129,17 @@
 
 			function Creature(name, mana, atk, hp, prop){
 				this.name = name;
+				this.type = "creature";
 				this.mana = mana;
 				this.atk = atk;
 				this.hp = hp;
+				this.prop = prop;
+			}
+
+			function Spell(name, mana, prop){
+				this.name = name;
+				this.type = "spell";
+				this.mana = mana;
 				this.prop = prop;
 			}
 
@@ -159,15 +167,15 @@
 				elHand: $('.hand').eq(1)
 			};
 
-			players[0].deck[0] = new Creature('Knife Juggler',2,  2, 2, 'juggle knife');
+			players[0].deck[0] = new Creature('Knife Juggler',2,  3, 2, 'juggle knife');
 			players[0].deck[1]  = new Creature('Tirion',8, 6, 6, 'taunt');
-			players[0].deck[2]  = new Creature('Eadric the Pure',7, 3, 7);
+			players[0].deck[2]  = new Spell('Consecration', 1, 'Deal 2 to all')
 			players[0].deck[3] = new Creature('Aviana',9, 5, 5);
 			players[0].deck[4]  = new Creature('Tristana',1, 6, 2);
-			players[0].deck[5] = new Creature('Knife Juggler',2,  2, 2, 'juggle knife');
+			players[0].deck[5] = new Creature('Knife Juggler',2,  3, 2, 'juggle knife');
 			players[0].deck[6]  = new Creature('Anivia',1, 1, 2, 'taunt');
 			players[0].deck[7]  = new Creature('Wyrmrest Agent',2, 2, 4);
-			players[0].deck[8] = new Creature('Alextraza',9, 8, 8);
+			players[0].deck[8] = new Creature('Sir Finley',1, 1, 3);
 			players[0].deck[9]  = new Creature('Leper Gnome',1, 2, 1);
 
 			players[1].deck[0] = new Creature('Kelthuzad',8,  6, 8, 'respawn');
@@ -209,18 +217,28 @@
 
 					//Check mana
 					if(players[playerIndex].currentMana >= card.mana){
-						players[playerIndex].currentMana -= card.mana;
-						players[playerIndex].hand.splice(index,1);
-					   	players[playerIndex].board.push(card);
-					   	updateBoard(players[playerIndex].board, players[playerIndex].elBoard);
-					   	updateHand(players[playerIndex].hand, players[playerIndex].elHand);
-					   	updatePlayer(players[playerIndex]);					
+						//Check creature
+						if(card.type == "creature"){
+						   	players[playerIndex].board.push(card);
+						} else if(card.type == "spell"){
+							if(card.name == "Consecration"){
+								for(var i=0; i<players[1-playerIndex].board.length; i++){
+									players[1-playerIndex].board[i].hp -=2;
+									hpCheck(players[1-playerIndex].board[i]);
+								}
+							}
+						}			
+							players[playerIndex].currentMana -= card.mana;
+							players[playerIndex].hand.splice(index,1);
+						   	updateBoard(players[playerIndex].board, players[playerIndex].elBoard);
+						   	updateBoard(players[1-playerIndex].board, players[1-playerIndex].elBoard);
+						   	updateHand(players[playerIndex].hand, players[playerIndex].elHand);
+						   	updatePlayer(players[playerIndex]);	
 					   } else {
 					   		alert("Not enough mana");
 					   }
 			   	}
 			})
-
 
 
 /////////////////////////FUNCTIONS
@@ -229,15 +247,14 @@
 				  for(var i = 0; i <board.length; i++){
 				    if(board[i].hp < 1){
 				      board.splice(i,1);
+				      //i--; //TODO
 				    }
 				  }
 				}
 
 				function updateBoard(board, player){
-
-
-
-					//update board
+				//update board
+				  hpCheck(board);
 				  player.html('');
 				  for(var i = 0; i<board.length;i++){
 
@@ -256,11 +273,11 @@
 				    // player.append( "");
 				      
 				  }
+				  
 				  	//var z = 20
 				  	$( ".card" ).draggable({
 				  		revert: true,
 					    stop: function(event, ui){
-					    	$(this).draggable("option", "disabled", true );
 					    	$(this).css({zIndex:0})
 					    },
 					    start: function(event,ui){
@@ -269,27 +286,34 @@
 					    }
 
 					    
-
 				  	});
 
-
 				    $( ".card" ).droppable({
-				    	
 				        drop: function( event, ui ) {
-				        index = $(this).index('.card')
+				        index = $(this).index('.card');
 				        $( this )
 				          .addClass( "ui-state-highlight" )
 				          .find( "p" )
 				            .html( "Dropped!" );
 
-				        //     $(this).parent().children().find('.hand').children('.playcard').hide();
-				        // $(this).index('.card')
+				            //Drop hp of target card
+							var playerIndex = $(this).parent().parent().index('.player');
+				        	var index = $(this).index();
+				        	players[playerIndex].board[index].hp--;
 
+					    	//Drop hp of current card
+							var playerIndex = $(event.toElement).parent().parent().index('.player');
+					    	var index = $(event.toElement).index();
+				        	players[playerIndex].board[index].hp--;
+
+				        	updateBoard(players[playerIndex].board, players[playerIndex].elBoard);
+				      		updateBoard(players[1-playerIndex].board, players[1-playerIndex].elBoard);
+					    	//$(this).draggable("option", "disabled", true );
 				        }
 
 				    });
 
-				}
+				} // END updateboard
 
 				  function updateHand(playerHand, playerHandEl){
 				  	playerHandEl.html('');
