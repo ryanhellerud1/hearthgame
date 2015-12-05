@@ -149,7 +149,7 @@
 				name: 'you',
 				deck:[],
 				hand: [],
-				board:[],
+				boardArray:[],
 				currentMana: 1,
 				totalMana: 1,
 				elBoard: $('.board').eq(0),
@@ -160,7 +160,7 @@
 				name: 'opponent',
 				deck: [],
 				hand:  [],
-				board: [],
+				boardArray: [],
 				currentMana: 0,
 				totalMana: 0,
 				elBoard: $('.board').eq(1),
@@ -219,19 +219,19 @@
 					if(players[playerIndex].currentMana >= card.mana){
 						//Check creature
 						if(card.type == "creature"){
-						   	players[playerIndex].board.push(card);
+						   	players[playerIndex].boardArray.push(card);
 						} else if(card.type == "spell"){
 							if(card.name == "Consecration"){
-								for(var i=0; i<players[1-playerIndex].board.length; i++){
-									players[1-playerIndex].board[i].hp -=2;
-									hpCheck(players[1-playerIndex].board[i]);
+								for(var i=0; i<players[1-playerIndex].boardArray.length; i++){
+									players[1-playerIndex].boardArray[i].hp -=2;
+									hpCheck(players[1-playerIndex].boardArray[i]);
 								}
 							}
 						}			
 							players[playerIndex].currentMana -= card.mana;
 							players[playerIndex].hand.splice(index,1);
-						   	updateBoard(players[playerIndex].board, players[playerIndex].elBoard);
-						   	updateBoard(players[1-playerIndex].board, players[1-playerIndex].elBoard);
+						   	updateBoard(players[playerIndex].boardArray, players[playerIndex].elBoard);
+						   	updateBoard(players[1-playerIndex].boardArray, players[1-playerIndex].elBoard);
 						   	updateHand(players[playerIndex].hand, players[playerIndex].elHand);
 						   	updatePlayer(players[playerIndex]);	
 					   } else {
@@ -243,31 +243,31 @@
 
 /////////////////////////FUNCTIONS
 
-				function hpCheck(board){
-				  for(var i = 0; i <board.length; i++){
-				    if(board[i].hp < 1){
-				      board.splice(i,1);
+				function hpCheck(boardArray){
+				  for(var i = 0; i <boardArray.length; i++){
+				    if(boardArray[i].hp < 1){
+				      boardArray.splice(i,1);
 				      //i--; //TODO
 				    }
 				  }
 				}
 
-				function updateBoard(board, player){
-				//update board
-				  hpCheck(board);
-				  player.html('');
-				  for(var i = 0; i<board.length;i++){
+				function updateBoard(boardArray, playerEl){
+				//update boardArray
+				  hpCheck(boardArray);
+				  playerEl.html('');
+				  for(var i = 0; i<boardArray.length;i++){
 
-				     player.append( "<div class='card card" +i+"'></div>" );
+				     playerEl.append( "<div class='card card" +i+"'></div>" );
 
 
-				      for(var k in board[i]){
+				      for(var k in boardArray[i]){
 				        var temp = k;
 				        if(temp === 'name'){
 				          temp = '';
-				          player.find(".card"+i).append("<span class='bold'>"+ temp+ " " + board[i][k] + "</span><br>");
+				          playerEl.find(".card"+i).append("<span class='bold'>"+ temp+ " " + boardArray[i][k] + "</span><br>");
 				        }else{
-				         player.find(".card"+i).append(k+": " + board[i][k]+"<br>");
+				         playerEl.find(".card"+i).append(k+": " + boardArray[i][k]+"<br>");
 				        }
 				      }
 				    // player.append( "");
@@ -290,24 +290,50 @@
 
 				    $( ".card" ).droppable({
 				        drop: function( event, ui ) {
-				        index = $(this).index('.card');
+				       // index = $(this).index('.card');
 				        $( this )
 				          .addClass( "ui-state-highlight" )
 				          .find( "p" )
 				            .html( "Dropped!" );
 
 				            //Drop hp of target card
-							var playerIndex = $(this).parent().parent().index('.player');
-				        	var index = $(this).index();
-				        	players[playerIndex].board[index].hp--;
+				           // var targetIndex = $(this).index('.card');
+				           // var attackerIndex = $(event.toElement).index('.card');
 
+				            var attackerPlayerIndex = $(event.toElement).parent().parent().index('.player');
+				            var targetPlayerIndex = $(this).parent().parent().index('.player');
+
+				            var attackerCardIndex = $(event.toElement).index();
+				            var targetCardIndex = $(this).index();
+
+
+							//var targetIndex = $(this).parent().parent().index('.player');
+							//var attackerIndex = $(event.toElement).parent().parent().index('.player');
+
+							//give the target and attacker their own index's
+							//var targetIndex = $(this).index();
+				        	//var attackerIndex = $(event.toElement).index();
+
+				        	//keep track of the targets hp and atk
+							var targetHp = players[targetPlayerIndex].boardArray[targetCardIndex].hp
+							var targetAtk = players[targetPlayerIndex].boardArray[targetCardIndex].atk
+
+							//keep track of the attackers hp and attack
+							var attackerHp = players[1-targetPlayerIndex].boardArray[attackerCardIndex].hp
+				        	var attackerAtk = players[1-targetPlayerIndex].boardArray[attackerCardIndex].atk
+				        	
+
+				        	targetHp = targetHp - attackerAtk;
+				        	attackerHp = attackerHp - targetAtk;
 					    	//Drop hp of current card
-							var playerIndex = $(event.toElement).parent().parent().index('.player');
-					    	var index = $(event.toElement).index();
-				        	players[playerIndex].board[index].hp--;
+							//var playerIndex = $(event.toElement).parent().parent().index('.player');
 
-				        	updateBoard(players[playerIndex].board, players[playerIndex].elBoard);
-				      		updateBoard(players[1-playerIndex].board, players[1-playerIndex].elBoard);
+					    	
+					    	
+				        	//players[playerIndex].board[index].hp--;
+
+				        	updateBoard(players[targetPlayerIndex].boardArray, players[targetPlayerIndex].elBoard);
+				      		updateBoard(players[attackerPlayerIndex].boardArray, players[attackerPlayerIndex].elBoard);
 					    	//$(this).draggable("option", "disabled", true );
 				        }
 
