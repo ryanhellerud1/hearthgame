@@ -167,12 +167,12 @@
 				elHand: $('.hand').eq(1)
 			};
 
-			players[0].deck[0] = new Creature('Knife Juggler',2,  3, 2, 'juggle knife');
+			players[0].deck[0] = new Creature('Knife Juggler',2,  3, 2, 'juggle');
 			players[0].deck[1]  = new Creature('Tirion',8, 6, 6, 'taunt');
 			players[0].deck[2]  = new Spell('Consecration', 1, 'Deal 2 to all')
 			players[0].deck[3] = new Creature('Aviana',9, 5, 5);
 			players[0].deck[4]  = new Creature('Tristana',1, 6, 2);
-			players[0].deck[5] = new Creature('Knife Juggler',2,  3, 2, 'juggle knife');
+			players[0].deck[5] = new Creature('Knife Juggler',2,  3, 2, 'juggle');
 			players[0].deck[6]  = new Creature('Anivia',1, 1, 2, 'taunt');
 			players[0].deck[7]  = new Creature('Wyrmrest Agent',2, 2, 4);
 			players[0].deck[8] = new Creature('Sir Finley',1, 1, 3);
@@ -220,6 +220,12 @@
 						//Check creature
 						if(card.type == "creature"){
 						   	players[playerIndex].boardArray.push(card);
+						   	if(card.prop == 'juggle'){
+							   	if(players[1-playerIndex].boardArray.length > 0){
+							   		var hitNumber = Math.floor(Math.random() * (players[1-playerIndex].boardArray.length - 0));
+							   		juggle(players[1-playerIndex].boardArray[hitNumber], players[1-playerIndex].boardArray, players[1-playerIndex].elBoard);
+							   	}
+						   	}
 						} else if(card.type == "spell"){
 							if(card.name == "Consecration"){
 								for(var i=0; i<players[1-playerIndex].boardArray.length; i++){
@@ -296,15 +302,15 @@
 				          .find( "p" )
 				            .html( "Dropped!" );
 
-				            //track the various indexes
+				            //track the player indexes
 				            var attackerPlayerIndex = $(event.toElement).parent().parent().index('.player');
 				            var targetPlayerIndex = $(this).parent().parent().index('.player');
 
+				            //track the card indexes
 				            var attackerCardIndex = $(event.toElement).index();
 				            var targetCardIndex = $(this).index();
 
-				        	//keep track of the targets hp and atk
-							
+				        	//check if players attacking self
 				        	if(attackerPlayerIndex=== targetPlayerIndex){
 				            	alert('cannot attack your own player fool')
 				            }else{
