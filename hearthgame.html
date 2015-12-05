@@ -224,8 +224,9 @@
 							if(card.name == "Consecration"){
 								for(var i=0; i<players[1-playerIndex].boardArray.length; i++){
 									players[1-playerIndex].boardArray[i].hp -=2;
-									hpCheck(players[1-playerIndex].boardArray[i]);
+									 //had [i] at end of board array
 								}
+								hpCheck(players[1-playerIndex].boardArray);
 							}
 						}			
 							players[playerIndex].currentMana -= card.mana;
@@ -243,10 +244,10 @@
 
 /////////////////////////FUNCTIONS
 
-				function hpCheck(boardArray){
-				  for(var i = 0; i <boardArray.length; i++){
-				    if(boardArray[i].hp < 1){
-				      boardArray.splice(i,1);
+				function hpCheck(boardObject){
+				  for(var i = 0; i <boardObject.length; i++){
+				    if(boardObject[i].hp < 1){
+				      boardObject.splice(i,1);
 				      //i--; //TODO
 				    }
 				  }
@@ -285,7 +286,6 @@
 					    	$(this).css({zIndex:100})
 					    }
 
-					    
 				  	});
 
 				    $( ".card" ).droppable({
@@ -295,8 +295,6 @@
 				          .addClass( "ui-state-highlight" )
 				          .find( "p" )
 				            .html( "Dropped!" );
-
-				            //Drop hp of target card
 
 				            //track the various indexes
 				            var attackerPlayerIndex = $(event.toElement).parent().parent().index('.player');
