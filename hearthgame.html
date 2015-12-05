@@ -304,14 +304,18 @@
 				            var targetCardIndex = $(this).index();
 
 				        	//keep track of the targets hp and atk
-							var targetHp = players[targetPlayerIndex].boardArray[targetCardIndex].hp
+							
+				        	if(attackerPlayerIndex=== targetPlayerIndex){
+				            	alert('cannot attack your own player fool')
+				            }else{
+				            var targetHp = players[targetPlayerIndex].boardArray[targetCardIndex].hp
 							var targetAtk = players[targetPlayerIndex].boardArray[targetCardIndex].atk
 
 							//keep track of the attackers hp and attack
 							var attackerHp = players[1-targetPlayerIndex].boardArray[attackerCardIndex].hp
 				        	var attackerAtk = players[1-targetPlayerIndex].boardArray[attackerCardIndex].atk
-				        	
-				        	//subtract the correct amount of hp
+				            
+				            //subtract the correct amount of hp
 				        	targetHp = targetHp - attackerAtk;
 				        	attackerHp = attackerHp - targetAtk;
 
@@ -323,6 +327,8 @@
 				        	updateBoard(players[targetPlayerIndex].boardArray, players[targetPlayerIndex].elBoard);
 				      		updateBoard(players[attackerPlayerIndex].boardArray, players[attackerPlayerIndex].elBoard);
 					    	//$(this).draggable("option", "disabled", true );
+				            }
+
 				        }
 
 				    });
