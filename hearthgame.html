@@ -244,10 +244,10 @@
 
 /////////////////////////FUNCTIONS
 
-				function hpCheck(boardObject){
-				  for(var i = 0; i <boardObject.length; i++){
-				    if(boardObject[i].hp < 1){
-				      boardObject.splice(i,1);
+				function hpCheck(boardArray){
+				  for(var i = 0; i <boardArray.length; i++){
+				    if(boardArray[i].hp < 1){
+				      boardArray.splice(i,1);
 				      //i--; //TODO
 				    }
 				  }
