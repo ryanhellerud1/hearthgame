@@ -297,22 +297,13 @@
 				            .html( "Dropped!" );
 
 				            //Drop hp of target card
-				           // var targetIndex = $(this).index('.card');
-				           // var attackerIndex = $(event.toElement).index('.card');
 
+				            //track the various indexes
 				            var attackerPlayerIndex = $(event.toElement).parent().parent().index('.player');
 				            var targetPlayerIndex = $(this).parent().parent().index('.player');
 
 				            var attackerCardIndex = $(event.toElement).index();
 				            var targetCardIndex = $(this).index();
-
-
-							//var targetIndex = $(this).parent().parent().index('.player');
-							//var attackerIndex = $(event.toElement).parent().parent().index('.player');
-
-							//give the target and attacker their own index's
-							//var targetIndex = $(this).index();
-				        	//var attackerIndex = $(event.toElement).index();
 
 				        	//keep track of the targets hp and atk
 							var targetHp = players[targetPlayerIndex].boardArray[targetCardIndex].hp
@@ -322,16 +313,15 @@
 							var attackerHp = players[1-targetPlayerIndex].boardArray[attackerCardIndex].hp
 				        	var attackerAtk = players[1-targetPlayerIndex].boardArray[attackerCardIndex].atk
 				        	
-
+				        	//subtract the correct amount of hp
 				        	targetHp = targetHp - attackerAtk;
 				        	attackerHp = attackerHp - targetAtk;
-					    	//Drop hp of current card
-							//var playerIndex = $(event.toElement).parent().parent().index('.player');
 
-					    	
-					    	
-				        	//players[playerIndex].board[index].hp--;
+				        	//set the card to the correct amount of hp
+				        	players[1-targetPlayerIndex].boardArray[attackerCardIndex].hp = attackerHp;
+				        	players[targetPlayerIndex].boardArray[targetCardIndex].hp = targetHp;
 
+							//update the boards
 				        	updateBoard(players[targetPlayerIndex].boardArray, players[targetPlayerIndex].elBoard);
 				      		updateBoard(players[attackerPlayerIndex].boardArray, players[attackerPlayerIndex].elBoard);
 					    	//$(this).draggable("option", "disabled", true );
