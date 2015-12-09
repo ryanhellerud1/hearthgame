@@ -233,11 +233,15 @@
 					updatePlayer(players[1-index]);	
 					draw(players[1-index].hand, players[1-index].deck, players[1-index].elHand);
 					var board = players[index].boardArray
+					var board2 = players[1-index].boardArray
 					if(board.length >0){
 						
 						
 						for (var i =0; i< board.length; i++) {
 							board[i].playedThisTurn = false;
+						};
+						for (var i =0; i< board2.length; i++) {
+							board2[i].playedThisTurn = false;
 						};
 					}
 			})
@@ -384,7 +388,9 @@
 						      		updateBoard(players[attackerPlayerIndex].boardArray, players[attackerPlayerIndex].elBoard);
 						    		//$(this).draggable("disable");
 						      		//$(this).draggable("option", "disabled", true );
+						      		if(players[1-targetPlayerIndex].boardArray[attackerCardIndex]){
 						      		players[1-targetPlayerIndex].boardArray[attackerCardIndex].playedThisTurn = true;
+						      		}
 					    		} else{
 					    			alert('Already played this turn');
 					    				}
