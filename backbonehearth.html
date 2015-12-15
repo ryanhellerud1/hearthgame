@@ -13,6 +13,23 @@
   }
   h4{
     color:blue;
+    margin:5px;
+  }
+  .card{
+    width:150px;
+    background-color:dodgerblue;
+    margin:5px;
+    padding:5px;
+  }
+  .prop{
+    margin:5px 0px;
+    font-size:16px;
+  }
+  .board .play{
+    display:none;
+  }
+  .deck .play{
+    display:none;
   }
 </style>
 
@@ -50,11 +67,18 @@
   <div class="card">
     <b><%= name %></b> <br>
     Mana: <%= mana %> <br>
+    <div class="prop">
+      <%= prop %>
+    </div>
+    <br><br>
     <%= atk %> / <%= hp %>
-    <%= prop %>
+
   </div>
+  <button class="play">Play</button>
+  <!--
   <button class="del">Delete</button>
   <button class="edit">Edit</button>
+  -->
 
 </script>
 
@@ -63,7 +87,7 @@
 //Models
 var Card = Backbone.Model.extend({
   defaults: {
-    name: "default name",
+    name: "Default Name",
     type: "creature",
     mana: "0",
     atk: "1",
@@ -209,11 +233,17 @@ var CardView = Backbone.View.extend({
   events: {
     'click .edit' : 'edit',
     'click .del': 'destroy',
-    'hover .card' : 'showAlert'
+    'hover .card' : 'showAlert',
+    'click .play' : 'playcard'
   },
   edit: function() {
     var newname = prompt('whats new name', this.model.get('name'));
     this.model.set('name',newname);
+  },
+
+  playcard: function(){
+    board.add(this.model);
+    hand.shift();
   },
   showAlert: function() {
     alert("card hovered");
@@ -277,7 +307,6 @@ var HandView = Backbone.View.extend({
   },
 
   removeOne: function(card){
-    alert("hi");
     var newCardView = new CardView({model: card});
     this.$el.append(newCardView.el);
   },
@@ -289,7 +318,7 @@ var deck1collection = new CardCollection([
     mana: 2, 
     atk: 3,
     hp: 2,
-    prop: 'juggle',
+    prop: 'Whenever you summon a minion, deal 1 damage to a random enemy.',
     type: 'creature'
   },
   {
@@ -301,25 +330,44 @@ var deck1collection = new CardCollection([
     type: 'creature'
   },
   {
-
+    name: 'Wisp',
+    mana: 0, 
+    atk: 1,
+    hp: 1,
+    prop: '',
+    type: 'creature'
   },
   {
-    name:'Only name',
+    name: 'Aviana',
+    mana: 9, 
+    atk: 5,
+    hp: 5,
+    prop: 'Your minions cost 1.',
+    type: 'creature'
+  },
+  {
+    name: 'Senjin Shieldmasta',
+    mana: 4, 
+    atk: 3,
+    hp: 5,
+    prop: 'Taunt',
+    type: 'creature'
+  },
+  {
+    name: 'Consecration',
+    mana: 4, 
+    prop: 'Deal 2 damage to all enemies.',
+    type: 'spell',
+    atk: "",
+    hp: "",
+  },
+  {
+
   }
 ])
 
 var hand = new CardCollection([
-  {
-    name: 'Tristana',
-    mana: 1, 
-    atk: 5,
-    hp: 1,
-    prop: '',
-    type: 'creature'
-  },
-  {
-    name:'The Name',
-  }
+
 ])
 
 var board = new CardCollection([
@@ -396,6 +444,11 @@ Backbone.history.start();
 $('.drawcard').click(function(){
   draw(deck1collection);
 });
+
+  draw(deck1collection);
+  draw(deck1collection);
+  draw(deck1collection);
+  draw(deck1collection);
 
 </script>
 
